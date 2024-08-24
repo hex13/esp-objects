@@ -1,10 +1,10 @@
-const ESP = Symbol('ESP');
+const ESP_LISTENERS = Symbol('ESP_LISTENERS');
 
 export function spy(object) {
 	const listeners = Object.create(null);
 	return new Proxy(object, {
 		get(target, prop) {
-			if (prop == ESP) {
+			if (prop == ESP_LISTENERS) {
 				return listeners;
 			}
 			const value = target[prop];
@@ -24,7 +24,7 @@ export function spy(object) {
 
 export function on(spy, meth) {
 	const info = [];
-	const listeners = spy[ESP];
+	const listeners = spy[ESP_LISTENERS];
 	listeners[meth] = listeners[meth] || [];
 	listeners[meth].push((args, result) => {
 		info.push({ name: meth, args, result })
